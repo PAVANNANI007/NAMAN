@@ -9,9 +9,11 @@ body {
   }
   
   .header {
-    background-color: #1976d2;
+    text-align: center;
+    background-color: #eb6a1f;
     color: white;
     padding: 10px;
+
   }
   
   .content {

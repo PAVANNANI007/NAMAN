@@ -9,6 +9,7 @@ import { FormService } from 'src/app/services/form.service';
 })
 export class FormBuilderComponent implements OnInit {
   form!: FormGroup;
+  showRemoveButtons: boolean = true;
 
   constructor(private fb: FormBuilder, private formStateService: FormService) { }
 
@@ -84,7 +85,10 @@ populateForm(formData: any) {
   });
 }
 removeField(index: number) {
-  this.fields.removeAt(index);
+  if(this.showRemoveButtons){
+    this.fields.removeAt(index);
+  }
+  
 }
 
   get fields(): FormArray {
@@ -113,6 +117,7 @@ saveForm() {
         console.error('Error saving form data:', error);
       }
     );
+    this.showRemoveButtons = false;
 }
 
 
@@ -143,8 +148,10 @@ addOption(parentIndex: number, type: string) {
 
 
 removeOption(parentIndex: number, optionIndex: number, type: string) {
-  const optionsArray = (type === 'dropdown') ? this.getDropdownOptions(parentIndex) : this.getCheckboxOptions(parentIndex);
-  optionsArray.removeAt(optionIndex);
+  if(this.showRemoveButtons){
+    const optionsArray = (type === 'dropdown') ? this.getDropdownOptions(parentIndex) : this.getCheckboxOptions(parentIndex);
+    optionsArray.removeAt(optionIndex);
+  }
 }
 getOptionsArray(index: number): FormArray {
   return (this.fields.at(index).get('options') as FormArray);

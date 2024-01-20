@@ -16,5 +16,10 @@ export class FormService {
   getFormData(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/forms`);
   }
-
+  login(username: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, { username, password });
+  }
+  // logindetails(): Observable<any[]> {
+  //   return this.http.get<any[]>(`${this.apiUrl}/login`);
+  // }
 }

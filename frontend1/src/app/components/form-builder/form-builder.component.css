@@ -1,31 +1,30 @@
-.dynamic-form {
-    max-width: 400px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-  }
-  
-  .form-field-container {
-    margin-bottom: 20px;
-  }
-  
-  .field-input {
-    display: flex;
-    align-items: center;
-  }
-  
-  button {
-    margin-right: 10px;
-  }
-  
-  mat-checkbox {
-    margin-top: 8px;
-  }
-  
-  mat-form-field {
-    width: 100%;
-  }
-  
+.form-container {
+  max-width: 600px;
+  margin: auto;
+}
+
+.form-header {
+  text-align: center;
+  padding: 20px 0;
+}
+#Save{
+  margin: 10px;
+  background-color: #eb6a1f;
+  color: white;
+}
+.button{
+  margin: 10px;
+}
+
+.form-field {
+  margin-bottom: 20px;
+}
+
+.form-buttons {
+  text-align: center;
+  margin-top: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+}

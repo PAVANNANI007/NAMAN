@@ -33,10 +33,24 @@ const formSchema = new mongoose.Schema({
 
 
 const Form = mongoose.model('Form', formSchema);
+const User = mongoose.model('User', {
+  username: String,
+  password: String,
+});
 
-// Define API endpoints
+app.post('/login',async (req, res) => {
+  const { username, password } = req.body;
 
-// Save form data to MongoDB
+  User.findOne({ username, password }, (err, user) => {
+    if (err) {
+      res.status(500).send('Internal Server Error');
+    } else if (!user) {
+      res.status(401).send('Invalid credentials');
+    } else {
+      res.status(200).send('Login successful');
+    }
+  });
+});
 app.post('/forms', async (req, res) => {
   try {
     const formData = req.body;
