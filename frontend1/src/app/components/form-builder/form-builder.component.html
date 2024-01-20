@@ -1,0 +1,67 @@
+<form [formGroup]="form">
+    <header>FORM CREATION</header>
+    <mat-form-field>
+      <label for="formName">Form Name:</label>
+      <input matInput type="text" id="formName" formControlName="formName" required>
+    </mat-form-field>
+  
+    <div formArrayName="fields">
+      <div *ngFor="let field of fields.controls; let i = index" [formGroupName]="i">
+        <div *ngIf="field.get('type')?.value === 'text'">
+          <mat-form-field>
+            <label for="label">Label:</label>
+            <input matInput type="text" id="label" formControlName="label" required>
+          </mat-form-field>
+          <mat-form-field>
+            <label for="placeholder">Placeholder:</label>
+            <input matInput type="text" id="placeholder" formControlName="placeholder" required>
+          </mat-form-field>
+        </div>
+        <div *ngIf="field.get('type')?.value === 'dropdown'">
+          <mat-form-field>
+            <label for="label">Label:</label>
+            <input matInput type="text" id="label" formControlName="label" required>
+          </mat-form-field>
+          <div formArrayName="options">
+            <div *ngFor="let option of getOptionsArray(i).controls; let j = index" [formGroupName]="j">
+                <mat-form-field>
+                  <label for="option">Option:</label>
+                  <input matInput type="text" id="option" formControlName="option" required>
+                </mat-form-field>
+                <button type="button" (click)="removeOption(i, j, 'dropdown')">Remove Option</button>
+              </div>
+              <button type="button" (click)="addOption(i, 'dropdown')">Add Option</button>
+              
+          </div>
+        </div>
+          <button type="button" mat-raised-button color="warn" (click)="removeField(i)">Remove Field</button>
+        <div *ngIf="field.get('type')?.value === 'checkbox'">
+          <!-- ... (checkbox field inputs) ... -->
+          <mat-form-field>
+            <label for="label">Label:</label>
+            <input matInput type="text" id="label" formControlName="label" required>
+          </mat-form-field>
+          <div formArrayName="options">
+            <div *ngFor="let option of getFieldOptions(field).controls; let j = index" [formGroupName]="j">
+              <mat-form-field>
+                <label for="option">Option:</label>
+                <input matInput type="text" id="option" formControlName="option" required>
+              </mat-form-field>
+              <button type="button" (click)="removeOption(i, j, 'checkbox')">Remove Option</button>
+  
+            </div>
+            <button type="button" (click)="addOption(i, 'checkbox')">Add Option</button>
+  
+          </div>
+        </div>
+  
+        <button type="button" mat-raised-button color="warn" (click)="removeField(i)">Remove Field</button>
+      </div>
+    </div>
+  
+    <button type="button" mat-raised-button (click)="addTextField()">Add Text Field</button>
+    <button type="button" mat-raised-button (click)="addDropdownField()">Add Dropdown Field</button>
+    <button type="button" mat-raised-button (click)="addCheckboxField()">Add Checkbox Field</button>
+  
+    <button type="button" mat-raised-button color="primary" (click)="saveForm()">Save Form</button>
+  </form>
