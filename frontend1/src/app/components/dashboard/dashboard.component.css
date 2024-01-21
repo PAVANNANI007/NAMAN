@@ -1,0 +1,32 @@
+/* .user{
+    margin: 10px;
+} */
+/* dashboard.component.css */
+
+.login-form {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  mat-form-field {
+    width: 100%;
+    margin-top: 15px;
+  }
+  
+  button {
+    width: 100%;
+    margin-top: 20px;
+    background-color: #1976D2; /* Angular Material primary color */
+    color: #fff;
+  }
+  
+  button:hover {
+    background-color: #135f8b; /* Slightly darker shade on hover */
+  }
+  
+  

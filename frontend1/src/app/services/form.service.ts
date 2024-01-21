@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +16,20 @@ export class FormService {
   getFormData(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/forms`);
   }
-  login(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { username, password });
+  register(user: { username: string; password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, user);
   }
-  // logindetails(): Observable<any[]> {
-  //   return this.http.get<any[]>(`${this.apiUrl}/login`);
-  // }
+
+  login(user: { username: string; password: string }): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, user);
+  }
+
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem('token');
+    return !!token;
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
 }
