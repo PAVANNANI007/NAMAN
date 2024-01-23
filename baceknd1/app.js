@@ -1,10 +1,7 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(cors());
@@ -12,17 +9,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-  );
+  res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
   next();
 });
+
 
 mongoose.connect('mongodb://localhost:27017/NAMAN', {
   useNewUrlParser: true,
@@ -40,56 +32,29 @@ const formSchema = new mongoose.Schema({
     }
   }],
 });
-
-const Form = mongoose.model('Form', formSchema);
-
-const headers = new HttpHeaders({
-  'Content-Type': 'application/json',
-  'Authorization': 'Bearer ' + token
-});
-
-
-const secretKey = generateSecretKey();
-
-// Your User model
-const User = mongoose.model('User', {
+const userSchema = new mongoose.Schema({
   username: String,
   password: String,
 });
-app.use(bodyParser.json());
 
+const User = mongoose.model('User', userSchema);
+const Form = mongoose.model('Form', formSchema);
 
-app.post('/register', async (req, res) => {
+app.post('/forms', async (req, res) => {
+  const { username, password } = req.body;
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = new User({
-      username: req.body.username,
-      password: hashedPassword,
-    });
-    await user.save();
-    res.status(201).json({ message: 'User registered successfully' });
+    const user = await User.findOne({ username, password });
+    if (user) {
+      res.status(200).json({ success: true, message: 'Login successful' });
+    } else {
+      res.status(401).json({ success: false, error: 'Invalid username or password' });
+    }
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
-app.post('/login', async (req, res) => {
-  try {
-    const user = await User.findOne({ username: req.body.username });
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid username or password' });
-    }
 
-    const passwordMatch = await bcrypt.compare(req.body.password, user.password);
-    if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid username or password' });
-    }
-
-    const token = jwt.sign({ username: user.username }, 'your-secret-key', { expiresIn: '1h' });
-    res.status(200).json({ token });
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
 
 app.post('/forms', async (req, res) => {
   try {
@@ -103,6 +68,7 @@ app.post('/forms', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 app.get('/forms', async (req, res) => {
   try {
     const forms = await Form.find();
@@ -113,7 +79,6 @@ app.get('/forms', async (req, res) => {
   }
 });
 
-// Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

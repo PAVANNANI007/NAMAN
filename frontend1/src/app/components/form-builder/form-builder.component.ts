@@ -94,19 +94,7 @@ removeField(index: number) {
   get fields(): FormArray {
   return this.form.get('fields') as FormArray;
 }
-
-// saveForm() {
-//   console.log(this.form.value)
-//   this.formStateService.updateFormData(this.form.value);
-//   this.form.reset();
-// }
-// saveForm() {
-//   console.log('Form values to be saved:', this.form.value);
-//   this.formStateService.updateFormData(this.form.value);
-//   this.form.reset();
-// }
 saveForm() {
-  console.log('Form values to be saved:', this.form.value);
   this.formStateService.updateFormData(this.form.value)
     .subscribe(
       (response) => {

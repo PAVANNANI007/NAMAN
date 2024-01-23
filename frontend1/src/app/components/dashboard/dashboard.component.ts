@@ -10,13 +10,12 @@ import { FormService } from 'src/app/services/form.service';
 })
 export class DashboardComponent implements OnInit {
   loginForm!: FormGroup;
-  username!: string;
-  password!: string;
+  errorMessage!: string;
 
   constructor(
     private formStateService: FormService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -29,19 +28,24 @@ export class DashboardComponent implements OnInit {
       password: ['', Validators.required],
     });
   }
-
   login(): void {
-    this.formStateService.login({ username: this.username, password: this.password }).subscribe(
-      (response) => {
-        localStorage.setItem('token', response.token);
-        this.router.navigate(['/formbuilder']);
-      },
-      (error) => {
-        console.error('Login failed:', error);
-        // Log additional details from the error object
-        console.log('Error details:', error.error);
-      }
-    );
+    if (this.loginForm.valid) {
+      const user = this.loginForm.value;
+      this.formStateService.login(user).subscribe(
+        (response) => {
+          console.log('Login successful!', response);
+          this.router.navigate(['/formbuilder']); // Adjust the route based on your application
+        },
+        (error) => {
+          console.error('Login error', error);
+          // Display an error message to the user
+          this.errorMessage = 'Login failed. Please check your credentials.';
+        }
+      );
+    } else {
+      console.error('Invalid form submission');
+    }
   }
+  
   
 }
